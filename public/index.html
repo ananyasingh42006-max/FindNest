@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FindNest – Lost &amp; Found</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f5f6;--card:#fff;--ink:#10252b;--mute:#5d737a;--line:#d8e2e5;--lost:#d9482b;--found:#0f7c76;--brand:#10252b;--on:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a1e;--card:#16262b;--ink:#e8f1f3;--mute:#93aab1;--line:#25393f;--lost:#ff7a5c;--found:#3cc7bd;--brand:#e8f1f3;--on:#0e1a1e}}
+:root[data-theme="dark"]{--bg:#0e1a1e;--card:#16262b;--ink:#e8f1f3;--mute:#93aab1;--line:#25393f;--lost:#ff7a5c;--found:#3cc7bd;--brand:#e8f1f3;--on:#0e1a1e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif}
+h1,h2,h3,.logo{font-family:'Bricolage Grotesque',Georgia,serif;margin:0;line-height:1.1}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--found);outline-offset:2px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:12px 20px;flex-wrap:wrap}
+.logo{font-size:1.5rem;font-weight:800;cursor:pointer;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button,.btn{border:0;background:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+nav button:hover{background:var(--bg)}
+.btn{background:var(--brand);color:var(--on)}
+.btn.lost{background:var(--lost);color:#fff}.btn.found{background:var(--found);color:#fff}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
+.hero{padding:40px 0 28px}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;max-width:14ch}
+.hero p{color:var(--mute);max-width:46ch;margin:14px 0 22px}
+.search{display:flex;gap:8px;max-width:560px}
+.search input{flex:1;padding:13px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.cta{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.tabs{display:flex;gap:6px;margin:26px 0 12px;flex-wrap:wrap;align-items:center}
+.tab{padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600}
+.tab[aria-pressed=true]{background:var(--brand);color:var(--on);border-color:var(--brand)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+.chip{flex:none;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:none;cursor:pointer}
+.chip[aria-pressed=true]{border-color:var(--found);color:var(--found);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;text-align:left;padding:0;display:flex;flex-direction:column}
+.card:hover{border-color:var(--ink)}
+.thumb{height:130px;display:grid;place-items:center;font-size:2.6rem;background:var(--bg);background-size:cover;background-position:center}
+.card .b{padding:14px}.card h3{font-size:1.1rem;margin:6px 0 4px}
+.tag{font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:6px;color:#fff;display:inline-block}
+.tag.lost{background:var(--lost)}.tag.found{background:var(--found)}
+.meta{color:var(--mute);font-size:.9rem}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;max-width:620px}
+label{display:block;font-weight:600;margin:14px 0 4px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+.back{margin-bottom:14px}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.detail{grid-template-columns:1fr}}
+.detail .thumb{height:280px;border-radius:12px;font-size:5rem}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--brand);color:var(--on);padding:12px 20px;border-radius:10px;z-index:9}
+.empty{padding:40px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:12px}
+footer{text-align:center;color:var(--mute);padding:24px;font-size:.9rem}
+.msg{border-top:1px solid var(--line);padding:8px 0}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" id="logo" tabindex="0">FindNest</div>
+  <nav>
+    <button data-go="home">Home</button><button data-go="browse">Browse</button>
+    <button data-go="post">Post an item</button>
+  </nav>
+  <button class="btn ghost" id="auth">Log in</button>
+</header>
+<main id="app"></main>
+<footer>FindNest – a student-built lost &amp; found board. Post, search and reunite.</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,addDoc,deleteDoc,doc,onSnapshot,query,orderBy,where,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// PASTE YOUR FIREBASE CONFIG HERE (Project settings > Your apps > Web app)
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDjHpr-mP6LdweV-_Onla2dgTVyUrdI6J4",
+  authDomain: "findnest-c5d07.firebaseapp.com",
+  projectId: "findnest-c5d07",
+  storageBucket: "findnest-c5d07.firebasestorage.app",
+  messagingSenderId: "1070146846576",
+  appId: "1:1070146846576:web:7a046fd4c41246798859b5",
+  measurementId: "G-EP2S1QQMK2"
+};const fb=initializeApp(firebaseConfig),auth=getAuth(fb),db=getFirestore(fb);
+
+const CATS=[["all","All","🔎"],["phone","Phones","📱"],["wallet","Wallets","👛"],["keys","Keys","🔑"],["bag","Bags","🎒"],["id","ID cards","🪪"],["other","Other","📦"]];
+const icon=c=>(CATS.find(x=>x[0]===c)||CATS[6])[2];
+let items=[],st={view:"home",q:"",tab:"all",cat:"all",sel:null,user:null,img:"",ptype:"lost",signup:false};
+const $=s=>document.querySelector(s),app=$("#app");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,3000)}
+function go(v,x={}){Object.assign(st,{view:v},x);render();window.scrollTo(0,0)}
+const safeRender=()=>{if(!document.activeElement||!document.activeElement.closest("#pf,#lf,#claim"))render()};
+function thumb(i){return `<div class="thumb" ${i.img?`style="background-image:url('${i.img}')"`:""}>${i.img?"":icon(i.cat)}</div>`}
+function list(){const q=st.q.toLowerCase();return items.filter(i=>(st.tab==="all"||i.type===st.tab)&&(st.cat==="all"||i.cat===st.cat)&&(!q||(i.title+i.place+i.desc).toLowerCase().includes(q)))}
+function cards(a){return a.length?`<div class="grid">${a.map(i=>`<button class="card" data-id="${i.id}">${thumb(i)}<div class="b"><span class="tag ${i.type}">${i.type==="lost"?"Lost":"Found"}</span><h3>${esc(i.title)}</h3><div class="meta">${esc(i.place)} · ${esc(i.date)}</div></div></button>`).join("")}</div>`:`<div class="empty">No items yet. Post what you lost or found.</div>`}
+function browse(){return `<div class="tabs">${[["all","All"],["lost","Lost"],["found","Found"]].map(t=>`<button class="tab" data-tab="${t[0]}" aria-pressed="${st.tab===t[0]}">${t[1]}</button>`).join("")}</div><div class="chips">${CATS.map(c=>`<button class="chip" data-cat="${c[0]}" aria-pressed="${st.cat===c[0]}">${c[2]} ${c[1]}</button>`).join("")}</div>${cards(list())}`}
+function resize(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,700/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.7))};im.src=r.result};r.readAsDataURL(f)})}
+async function loadMsgs(id){try{const s=await getDocs(query(collection(db,"messages"),where("itemId","==",id)));const h=s.docs.map(d=>d.data()).map(m=>`<div class="msg"><strong>${esc(m.contact)}</strong><br>${esc(m.message)}</div>`).join("");if($("#msgs"))$("#msgs").innerHTML=h||"No messages yet."}catch(e){if($("#msgs"))$("#msgs").textContent="Could not load messages."}}
+function render(){
+ document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===st.view));
+ $("#auth").textContent=st.user?`Log out (${st.user.email.split("@")[0]})`:"Log in";
+ if(st.view==="home") app.innerHTML=`<section class="hero"><h1>Lost something? Found something?</h1><p>Search items reported near you, or post your own so the right person can find them.</p><form class="search" id="sf"><input id="hq" placeholder="Search wallet, keys, phone…" aria-label="Search items" value="${esc(st.q)}"><button class="btn">Search</button></form><div class="cta"><button class="btn lost" data-post="lost">I lost something</button><button class="btn found" data-post="found">I found something</button></div></section><h2>Recent reports</h2><div style="height:14px"></div>${cards(items.slice(0,4))}`;
+ else if(st.view==="browse") app.innerHTML=`<h2>Browse items</h2><div style="height:12px"></div><input id="bq" placeholder="Search items" aria-label="Search items" value="${esc(st.q)}">${browse()}`;
+ else if(st.view==="login") app.innerHTML=`<form class="panel" id="lf"><h2>${st.signup?"Create account":"Log in"}</h2><label for="em">Email</label><input id="em" type="email" required><label for="pw">Password (6+ characters)</label><input id="pw" type="password" minlength="6" required><div style="height:16px"></div><button class="btn">${st.signup?"Create account":"Log in"}</button> <button type="button" class="btn ghost" id="swap">${st.signup?"I have an account":"Create an account"}</button></form>`;
+ else if(st.view==="detail"){const i=items.find(x=>x.id===st.sel);if(!i){go("browse");return}const own=st.user&&i.uid===st.user.uid;
+  app.innerHTML=`<button class="btn ghost back" data-go="browse">Back to browse</button><div class="detail">${thumb(i)}<div><span class="tag ${i.type}">${i.type==="lost"?"Lost":"Found"}</span><h1 style="font-size:2rem;margin:10px 0">${esc(i.title)}</h1><p class="meta">${esc(i.place)} · ${esc(i.date)}</p><p>${esc(i.desc)}</p>${own?`<div class="panel" style="padding:16px"><strong>Messages for you</strong><div id="msgs" class="meta">Loading…</div><div style="height:12px"></div><button class="btn ghost" id="del">Delete this post</button></div>`:`<form id="claim" class="panel" style="padding:16px"><strong>${i.type==="found"?"This is mine":"I have seen this"}</strong><label for="cm">Message to the poster</label><textarea id="cm" rows="3" required placeholder="Describe a detail only the owner would know"></textarea><label for="cn">Your contact</label><input id="cn" required placeholder="Email or phone"><div style="height:12px"></div><button class="btn">Send message</button></form>`}</div></div>`;
+  if(own)loadMsgs(i.id)}
+ else if(st.view==="post"){if(!st.user){app.innerHTML=`<div class="panel"><h2>Log in to post</h2><p class="meta">Posting needs an account so people know who to contact.</p><button class="btn" id="login2">Log in</button></div>`;return}
+  app.innerHTML=`<form class="panel" id="pf"><h2>Post an item</h2><div class="tabs"><button type="button" class="tab" data-pt="lost" aria-pressed="${st.ptype==="lost"}">I lost it</button><button type="button" class="tab" data-pt="found" aria-pressed="${st.ptype==="found"}">I found it</button></div><label for="t">Item name</label><input id="t" required><div class="row"><div><label for="c">Category</label><select id="c">${CATS.slice(1).map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("")}</select></div><div><label for="d">Date</label><input type="date" id="d" required></div></div><label for="p">Location</label><input id="p" required><label for="ds">Description</label><textarea id="ds" rows="3"></textarea><label for="ct">Contact</label><input id="ct" required><label for="im">Photo (optional)</label><input type="file" id="im" accept="image/*"><div style="height:16px"></div><button class="btn ${st.ptype}">Post ${st.ptype==="lost"?"lost":"found"} item</button></form>`}
+}
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-go],[data-id],[data-tab],[data-cat],[data-post],[data-pt],#logo,#auth,#login2,#del,#swap");if(!t)return;
+ if(t.dataset.go)go(t.dataset.go);else if(t.id==="logo")go("home");
+ else if(t.dataset.id)go("detail",{sel:t.dataset.id});
+ else if(t.dataset.tab){st.tab=t.dataset.tab;render()}
+ else if(t.dataset.cat){st.cat=t.dataset.cat;render()}
+ else if(t.dataset.post)go("post",{ptype:t.dataset.post});
+ else if(t.dataset.pt){st.ptype=t.dataset.pt;render()}
+ else if(t.id==="swap"){st.signup=!st.signup;render()}
+ else if(t.id==="login2")go("login");
+ else if(t.id==="auth"){if(st.user){await signOut(auth);toast("Logged out")}else go("login")}
+ else if(t.id==="del"&&confirm("Delete this post for everyone?")){try{await deleteDoc(doc(db,"items",st.sel));toast("Post deleted");go("browse")}catch(err){toast("Could not delete: "+(err.code||err.message))}}});
+document.addEventListener("submit",async e=>{e.preventDefault();
+ if(e.target.id==="sf"){st.q=$("#hq").value;go("browse")}
+ if(e.target.id==="lf"){try{const f=st.signup?createUserWithEmailAndPassword:signInWithEmailAndPassword;await f(auth,$("#em").value,$("#pw").value);toast("Welcome!");go("browse")}catch(err){toast((err.code||"error").replace("auth/","").replace(/-/g," "))}}
+ if(e.target.id==="claim"){if(!st.user){toast("Log in to send a message");go("login");return}try{await addDoc(collection(db,"messages"),{itemId:st.sel,message:$("#cm").value,contact:$("#cn").value,from:st.user.uid,createdAt:serverTimestamp()});toast("Message sent to the poster");go("browse")}catch(err){toast("Could not send: "+(err.code||err.message))}}
+ if(e.target.id==="pf"){const b=e.target.querySelector("button.btn:last-child");b.disabled=true;try{await addDoc(collection(db,"items"),{type:st.ptype,title:$("#t").value,cat:$("#c").value,place:$("#p").value,date:$("#d").value,desc:$("#ds").value,contact:$("#ct").value,img:st.img,uid:st.user.uid,createdAt:serverTimestamp()});st.img="";toast("Item posted");go("browse",{tab:"all",cat:"all"})}catch(err){toast("Could not post: "+(err.code||err.message));b.disabled=false}}});
+document.addEventListener("input",e=>{if(e.target.id==="bq"){st.q=e.target.value;const p=e.target.selectionStart;render();const b=$("#bq");b.focus();b.setSelectionRange(p,p)}});
+document.addEventListener("change",async e=>{if(e.target.id==="im"){const f=e.target.files[0];if(f)st.img=await resize(f)}});
+onAuthStateChanged(auth,u=>{st.user=u?{uid:u.uid,email:u.email}:null;safeRender()});
+onSnapshot(query(collection(db,"items"),orderBy("createdAt","desc")),s=>{items=s.docs.map(d=>({id:d.id,...d.data()}));safeRender()},err=>toast("Could not load items: "+err.code));
+render();
+</script>
+</body>
+</html>
